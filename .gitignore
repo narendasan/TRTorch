@@ -13,4 +13,7 @@ experiments/
 py/build/
 py/tmp/
 py/.eggs
- 
+*.so
+*.pyc
+__pycache__
+py/trtorch.egg-info/
