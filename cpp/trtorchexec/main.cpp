@@ -55,12 +55,19 @@ int main(int argc, const char* argv[]) {
         dims.push_back(v);
     }
 
+    assert(dims.size() == 1 || dims.size() == 3);
+
+    trtorch::ExtraInfo info(std::vector<trtorch::ExtraInfo::InputRange>{{dims[0]}});
+    if (dims.size() == 3) {
+        info = trtorch::ExtraInfo(std::vector<trtorch::ExtraInfo::InputRange>{{dims[0], dims[1], dims[2]}});
+    }
+
     if (!trtorch::CheckMethodOperatorSupport(mod, "forward")) {
         std::cerr << "Method is not currently supported by TRTorch" << std::endl;
         return -1;
     }
 
-    auto engine = trtorch::ConvertGraphToTRTEngine(mod, "forward", dims);
+    auto engine = trtorch::ConvertGraphToTRTEngine(mod, "forward", info);
     std::ofstream out("/tmp/engine_converted_from_jit.trt");
     out << engine;
     out.close();
@@ -75,7 +82,7 @@ int main(int argc, const char* argv[]) {
     std::vector<at::Tensor> jit_results;
     jit_results.push_back(jit_results_ivalues.toTensor());
 
-    auto trt_mod = trtorch::CompileGraph(mod, dims);
+    auto trt_mod = trtorch::CompileGraph(mod, info);
     torch::jit::IValue trt_results_ivalues = trt_mod.forward(trt_inputs_ivalues);
     std::vector<at::Tensor> trt_results;
     trt_results.push_back(trt_results_ivalues.toTensor());

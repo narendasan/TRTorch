@@ -77,6 +77,12 @@ std::vector<core::conversion::InputRange> to_vec_internal_input_ranges(std::vect
 core::ExtraInfo to_internal_extra_info(ExtraInfo external) {
     core::ExtraInfo internal(to_vec_internal_input_ranges(external.input_ranges));
 
+    for (auto i : internal.convert_info.input_ranges) {
+        if (i.input_is_dynamic) {
+            internal.lower_info.input_is_dynamic = true;
+        }
+    }
+
     switch(external.op_precision) {
     case ExtraInfo::DataType::kChar:
         internal.convert_info.engine_settings.op_precision = nvinfer1::DataType::kINT8;

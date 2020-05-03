@@ -72,7 +72,7 @@ void AddEngineToGraph(torch::jit::script::Module mod, std::shared_ptr<torch::jit
 bool CheckMethodOperatorSupport(const torch::jit::script::Module& mod,
                                 std::string method_name) {
     // Go through Lowering to simplify graph and extract weight parameters
-    auto graph_and_parameters = lowering::Lower(mod, method_name);
+    auto graph_and_parameters = lowering::Lower(mod, method_name, lowering::LoweringInfo());
 
     auto g = graph_and_parameters.first;
     LOG_DEBUG(*g << "(CheckMethodOperatorSupport)\n");
@@ -85,7 +85,8 @@ std::string ConvertGraphToTRTEngine(const torch::jit::script::Module& mod,
                                     ExtraInfo cfg) {
 
     // Go through Lowering to simplify graph and extract weight parameters
-    auto graph_and_parameters = lowering::Lower(mod, method_name);
+    auto lower_cfg = std::move(cfg.lower_info);
+    auto graph_and_parameters = lowering::Lower(mod, method_name, lower_cfg);
 
     auto convert_cfg = std::move(cfg.convert_info);
     auto g = graph_and_parameters.first;

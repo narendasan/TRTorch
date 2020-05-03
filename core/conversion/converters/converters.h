@@ -106,10 +106,17 @@ struct Weights {
     int64_t num_output_maps;
 
     Weights();
-    Weights(ConversionCtx* ctx, at::Tensor t);
     Weights(ConversionCtx* ctx, float val);
+    Weights(ConversionCtx* ctx, int64_t val);
+    Weights(ConversionCtx* ctx, at::Tensor t);
+    Weights(ConversionCtx* ctx, c10::List<int64_t> arr);
     friend std::ostream& operator<<(std::ostream& os, const Weights& w);
 };
+
+inline nvinfer1::ITensor* list_to_const(ConversionCtx* ctx, c10::List<int64_t> arr) {
+    auto arr_weights = Weights(ctx, arr);
+    return ctx->net->addConstant(arr_weights.shape, arr_weights.data)->getOutput(0);
+}
 
 inline nvinfer1::ITensor* tensor_to_const(ConversionCtx* ctx, at::Tensor t) {
     auto t_weights = Weights(ctx, t);

@@ -57,6 +57,10 @@ std::vector<at::Tensor> RunEngine(std::string& eng, std::vector<at::Tensor> inpu
     ctx->enqueueV2(gpu_handles.data(), stream, nullptr);
 
     stream.synchronize();
+
+    ctx->destroy();
+    engine->destroy();
+    rt->destroy();
     return outputs;
 }
 

@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "torch/csrc/jit/api/module.h"
+#include "core/lowering/lowering.h"
 #include "core/conversion/conversion.h"
 
 namespace trtorch {
@@ -11,6 +12,7 @@ struct ExtraInfo {
     ExtraInfo(std::vector<conversion::InputRange> input_ranges)
         : convert_info(std::move(input_ranges)) {}
     conversion::ConversionInfo convert_info;
+    lowering::LoweringInfo lower_info;
 };
 
 bool CheckMethodOperatorSupport(const torch::jit::script::Module& mod, std::string method_name);

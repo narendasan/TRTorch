@@ -6,11 +6,12 @@ cc_library(
         "passes.h",
     ],
     srcs = [
-        "fuse_flatten_linear.cpp",
+        "exception_elimination.cpp",
         "expand_log_softmax.cpp",
+        "fuse_flatten_linear.cpp",
+        "switch_to_dynamic_shape_calculation_ops.cpp",
         "remove_dropout.cpp",
         "unpack_batch_norm.cpp",
-        "exception_elimination.cpp",
         "unpack_addmm.cpp"
     ],
     deps = [

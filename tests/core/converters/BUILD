@@ -29,6 +29,10 @@ converter_test(
 )
 
 converter_test(
+  name = "test_scale"
+)
+
+converter_test(
   name = "test_shuffle"
 )
 
@@ -50,6 +54,7 @@ test_suite(
     ":test_matrix_multiply",
     ":test_pooling",
     ":test_reduce",
+    ":test_scale",
     ":test_shuffle",
     ":test_softmax",
     ":test_unary",

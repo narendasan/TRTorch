@@ -15,6 +15,19 @@ Weights::Weights() {
     this->data.count = 0;
 }
 
+Weights::Weights(ConversionCtx* ctx, int64_t val) {
+    this->num_input_maps = 1;
+    this->num_output_maps = 1;
+    this->data.type = nvinfer1::DataType::kFLOAT;
+    int32_t* buf = reinterpret_cast<int32_t*>(malloc(1 * sizeof(int32_t)));
+    buf[0] = static_cast<int32_t>(val);
+    this->data.values = buf;
+    this->data.count = 1;
+    ctx->builder_resources.push_back(buf);
+    this->kernel_shape.nbDims = 1;
+    this->kernel_shape.d[0] = 1;
+}
+
 Weights::Weights(ConversionCtx* ctx, float val) {
     this->num_input_maps = 1;
     this->num_output_maps = 1;
@@ -26,6 +39,21 @@ Weights::Weights(ConversionCtx* ctx, float val) {
     ctx->builder_resources.push_back(buf);
     this->kernel_shape.nbDims = 1;
     this->kernel_shape.d[0] = 1;
+}
+
+Weights::Weights(ConversionCtx* ctx, c10::List<int64_t> arr) {
+    this->num_input_maps = 1;
+    this->num_output_maps = 1;
+    this->data.type = nvinfer1::DataType::kINT32;
+    auto in_arr = arr.vec();
+    std::vector<int32_t> i32_arr(in_arr.begin(), in_arr.end());
+    int32_t* buf = reinterpret_cast<int32_t*>(malloc(in_arr.size() * sizeof(int32_t)));
+    std::copy(i32_arr.begin(), i32_arr.end(), buf);
+    this->data.values = buf;
+    this->data.count = i32_arr.size();
+    ctx->builder_resources.push_back(buf);
+    this->kernel_shape.nbDims = 1;
+    this->kernel_shape.d[0] = i32_arr.size();
 }
 
 Weights::Weights(ConversionCtx* ctx, at::Tensor t) {
@@ -46,7 +74,7 @@ Weights::Weights(ConversionCtx* ctx, at::Tensor t) {
 
     if (t.sizes().size() > 2) {
         this->kernel_shape.nbDims = t.sizes().size() - 2;
-        
+
         for (size_t i = 2; i < t.sizes().size(); i++) {
             this->kernel_shape.d[i - 2] = t.sizes()[i];
             this->data.count *= this->kernel_shape.d[i - 2];
@@ -68,7 +96,7 @@ Weights::Weights(ConversionCtx* ctx, at::Tensor t) {
     void* buf = malloc(t_cpu.numel() * sizeof(float));
     ctx->builder_resources.push_back(buf);
     memcpy(buf, t_cpu.data_ptr(), t_cpu.numel() * sizeof(float));
-    
+
     this->data.type = dtype_optional.value();
     this->data.count = t_cpu.numel();
     this->data.values = buf;
