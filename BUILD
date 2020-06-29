@@ -17,7 +17,7 @@ pkg_tar(
         "//core/lowering/passes:include",
         "//core/util:include",
         "//core/util/logging:include"
-    ],
+    ] ,
 )
 
 pkg_tar(

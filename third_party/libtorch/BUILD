@@ -1,5 +1,12 @@
 package(default_visibility = ["//visibility:public"])
 
+config_setting(
+    name = "aarch64",
+    values = {
+	"cpu" : "aarch64"
+    },
+)
+
 cc_library(
     name = "libtorch",
     deps = [
@@ -9,7 +16,7 @@ cc_library(
 
 cc_library(
     name = 'torch',
-    hdrs = glob(
+    hdrs = ['include'] + glob(
         [
             'include/torch/**/*.h',
         ], exclude = [
