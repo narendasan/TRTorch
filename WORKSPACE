@@ -108,19 +108,19 @@ git_repository(
 new_local_repository(
     name = "cuda",
     path = "/usr/local/cuda/targets/x86_64-linux/",
-    build_file = "third_party/libs/cuda.BUILD"
+    build_file = "third_party/cuda/BUILD"
 )
 
 new_local_repository(
     name = "tensorrt",
     path = "/usr/local/cuda/targets/x86_64-linux/",
-    build_file = "third_party/libs/tensorrt.BUILD"
+    build_file = "third_party/tensorrt/local/BUILD"
 )
 
 new_local_repository(
     name = "cudnn",
     path = "/usr/local/cuda/targets/x86_64-linux/",
-    build_file = "third_party/libs/cudnn.BUILD"
+    build_file = "third_party/cudnn/local/BUILD"
 )
 
 ###################################################

@@ -36,7 +36,7 @@ cc_binary(
 	":use_pre_cxx11_abi" : ["@libtorch_pre_cxx11_abi//:libtorch",
          			"@libtorch_pre_cxx11_abi//:caffe2"],
 	":use_pre_cxx11_abi_aarch64" : ["@libtorch_pre_cxx11_abi_aarch64//:libtorch",
-         			"@libtorch_pre_cxx11_abi_aarch64//:caffe2"],
+                                        "@libtorch_pre_cxx11_abi_aarch64//:caffe2"],
 	"//conditions:default": ["@libtorch//:libtorch",
 			         "@libtorch//:caffe2"],
 	}),
