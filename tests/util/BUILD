@@ -22,13 +22,6 @@ config_setting(
 	}
 )
 
-config_setting(
-    name = "x86_64",
-    values = {
-	"cpu" : "x86_64"
-	}
-)
-
 cc_library(
     name = "util",
     hdrs = [
@@ -45,16 +38,17 @@ cc_library(
         "//core/util:prelude",
         "//cpp/api:trtorch",
     ] +select({
-        ":use_pre_cxx11_abi_aarch64": ["@libtorch_pre_cxx11_abi_aarch64//:libtorch",
-		                       "@libtorch_pre_cxx11_abi_aarch64//:caffe2"],
         ":aarch64": ["@libtorch_aarch64//:libtorch",
-		     "@libtorch_aarch64//:caffe2"],
+		     "@libtorch_aarch64//:caffe2",
+		     "@tensorrt_aarch64//:nvinfer"],
         ":use_pre_cxx11_abi":  ["@libtorch_pre_cxx11_abi//:libtorch",
-				"@libtorch_pre_cxx11_abi//:caffe2"],
-        "//conditions:default":  ["@libtorch//:libtorch"],
-    }) + select({
-        ":aarch64": ["@tensorrt_aarch64//:nvinfer"],
-        "//conditions:default":  ["@tensorrt//:nvinfer",
-				  "@libtorch//:caffe2"]
+				"@libtorch_pre_cxx11_abi//:caffe2",
+				"@tensorrt//:nvinfer"],
+        ":use_pre_cxx11_abi_aarch64": ["@libtorch_pre_cxx11_abi_aarch64//:libtorch",
+		                       "@libtorch_pre_cxx11_abi_aarch64//:caffe2",
+				       "@tensorrt_aarch64//:nvinfer"],
+        "//conditions:default":  ["@libtorch//:libtorch",
+				  "@libtorch//:caffe2",
+				  "@tensorrt//:nvinfer"],
     }),
 )

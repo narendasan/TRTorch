@@ -34,10 +34,10 @@ cc_library(
     ] + select({
         ":aarch64": ["@libtorch_aarch64//:libtorch",
 		     "@tensorrt_aarch64//:nvinfer"],
-        ":use_pre_cxx11_abi_aarch64": ["@libtorch_pre_cxx11_abi_aarch64//:libtorch",
-				       "@tensorrt_aarch64//:nvinfer"],
         ":use_pre_cxx11_abi":  ["@libtorch_pre_cxx11_abi//:libtorch",
 				"@tensorrt//:nvinfer"],
+        ":use_pre_cxx11_abi_aarch64": ["@libtorch_pre_cxx11_abi_aarch64//:libtorch",
+				       "@tensorrt_aarch64//:nvinfer"],
         "//conditions:default":  ["@libtorch//:libtorch",
 				  "@tensorrt//:nvinfer"],
     }),
