@@ -22,6 +22,7 @@ cc_library(
         "//core/conversion",
         "//core/util:prelude",
         "//cpp/api:trtorch",
+	"@tensorrt//:nvinfer"
     ] + select({
         ":use_pre_cxx11_abi": [
             "@libtorch_pre_cxx11_abi//:libtorch",
@@ -31,7 +32,5 @@ cc_library(
             "@libtorch//:libtorch",
             "@libtorch//:caffe2",
         ],
-    }) + select({
-        "//conditions:default": ["@tensorrt//:nvinfer"],
-    }),
+    })
 )
