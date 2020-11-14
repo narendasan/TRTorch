@@ -22,6 +22,17 @@ test_suite(
     ]
 )
 
+test_suite(
+    name = "test_modules_aarch64",
+    tests = [
+        ":test_modules_as_engines",
+        ":test_compiled_modules",
+        ":test_compiled_dla_modules",
+        ":test_multiple_registered_engines",
+        ":test_serialization"
+    ]
+)
+
 cc_test(
     name = "test_serialization",
     srcs = ["test_serialization.cpp"],
@@ -47,6 +58,17 @@ cc_test(
 cc_test(
     name = "test_modules_as_engines",
     srcs = ["test_modules_as_engines.cpp"],
+    deps = [
+        ":module_test"
+    ],
+    data = [
+        ":jit_models"
+    ]
+)
+
+cc_test(
+    name = "test_compiled_dla_modules",
+    srcs = ["test_compiled_dla_modules.cpp"],
     deps = [
         ":module_test"
     ],
