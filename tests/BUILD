@@ -30,7 +30,6 @@ test_suite(
     ]
 )
 
-
 test_suite(
     name = "python_api_tests",
     tests = [
